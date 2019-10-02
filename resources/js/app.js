@@ -15,7 +15,9 @@ import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ScrollContext as ScrollNav } from "react-router-scroll-4";
+
 const Home = lazy(() => import("./pages/home"));
+const Navbar = lazy(() => import("./components/Navbar"));
 
 
 
@@ -25,13 +27,14 @@ const App = () => {
 	return (
 		<Router>
 			<Suspense fallback={"Loading.."}>
+				<Navbar />
 				<ScrollNav>
 					<Switch>
 						<Route exact path="/" component={Home} />
 					</Switch>
 				</ScrollNav>
 			</Suspense>
-		</Router>
+		</Router >
 	);
 };
 

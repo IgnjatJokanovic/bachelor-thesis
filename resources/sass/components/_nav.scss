@@ -1,0 +1,60 @@
+.navbar-wrapper{
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	background-color: $blue;
+	&--grid{
+		display: grid;
+		grid-template-columns: 1fr  1fr;
+	}
+	&--links{
+		text-align: right;
+		padding-top: 0.6rem;
+		&--dropdown{
+				display: inline-block;
+				i{
+					font-size: 1.5rem;
+					padding-left: 0.7rem;
+					padding-right: 0.7rem;
+					cursor: pointer;
+					color: $white;
+					position: relative;
+					span{
+						position: absolute;
+						top: -8px;
+						border-radius: 50%;
+						padding: 6px;
+						right: -3px;
+						font-size: 12px;
+						background: $red;
+						color: $white;
+					}
+				}
+		}
+		a{
+			text-decoration: none;
+			color: $white;
+			padding: 1rem;
+			font-weight: bold;
+		}
+	}
+
+	&--logo{
+		display: grid;
+		grid-template-columns: 0.1fr 0.4fr;
+		&--srch{
+			padding-top: 0.6rem;
+			input{
+				border-radius: 5px;
+				outline: none;
+				border: none;
+				padding: 0.4rem 0rem 0.4rem 0.5rem;
+				&::placeholder{
+					padding-left: 0.2rem;
+				}
+			}
+		}
+		img{
+			width: 3rem;
+		}
+	}
+}
