@@ -15,29 +15,43 @@ import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ScrollContext as ScrollNav } from "react-router-scroll-4";
+import Alert from "./components/Alert";
 
 const Home = lazy(() => import("./pages/home"));
 const Navbar = lazy(() => import("./components/Navbar"));
-
-
-
+const AlertContext = React.createContext();
 
 const App = () => {
+    const [alertMessage, setAlertMessage] = React.useState("");
+    const [alertState, setAlertState] = React.useState("");
 
-	return (
-		<Router>
-			<Suspense fallback={"Loading.."}>
-				<Navbar />
-				<ScrollNav>
-					<Switch>
-						<Route exact path="/" component={Home} />
-					</Switch>
-				</ScrollNav>
-			</Suspense>
-		</Router >
-	);
+    const setAlert = (message, state) => {
+        setAlertMessage(message);
+        setAlertState(state);
+
+        setTimeout(() => {
+            setAlertMessage("");
+            setAlertState("");
+        }, 2500);
+    };
+
+    return (
+        <Router>
+            <Suspense fallback={"Loading.."}>
+                <Navbar />
+                <Alert alertMessage={alertMessage} alertState={alertState} />
+                <ScrollNav>
+                    <AlertContext.Provider value={setAlert}>
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                        </Switch>
+                    </AlertContext.Provider>
+                </ScrollNav>
+            </Suspense>
+        </Router>
+    );
 };
 
 if (document.getElementById("app")) {
-	ReactDOM.render(<App />, document.getElementById("app"));
+    ReactDOM.render(<App />, document.getElementById("app"));
 }
