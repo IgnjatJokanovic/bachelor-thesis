@@ -95,10 +95,83 @@ const validateRegister = user => {
     });
 };
 
+const selectYearOptions = () => {
+    let today = new Date();
+    let yearArray = [];
+    let start = today.getFullYear();
+    let end = start - 99;
+    for (let i = start; i >= end; i--) {
+        yearArray.push({ value: i, label: i });
+    }
+    return yearArray;
+};
+
+const selectDayOptions = () => {
+    let dayArray = [];
+    for (let i = 1; i <= 31; i++) {
+        dayArray.push({ value: i, label: i });
+    }
+    return dayArray;
+};
+
+const selectMonthOptions = [
+    {
+        value: "Jan",
+        label: "Jan"
+    },
+    {
+        value: "Feb",
+        label: "Feb"
+    },
+    {
+        value: "Mar",
+        label: "Mar"
+    },
+    {
+        value: "Apr",
+        label: "Apr"
+    },
+    {
+        value: "May",
+        label: "May"
+    },
+    {
+        value: "Jun",
+        label: "Jun"
+    },
+    {
+        value: "Jul",
+        label: "Jul"
+    },
+    {
+        value: "Aug",
+        label: "Aug"
+    },
+    {
+        value: "Sep",
+        label: "Sep"
+    },
+    {
+        value: "Oct",
+        label: "Oct"
+    },
+    {
+        value: "Nov",
+        label: "Nov"
+    },
+    {
+        value: "Dec",
+        label: "Dec"
+    }
+];
+
 export {
     isAuthenticated,
     validateLogin,
     validateRegister,
     fetchCookie,
-    logOut
+    logOut,
+    selectYearOptions,
+    selectDayOptions,
+    selectMonthOptions
 };

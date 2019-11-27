@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
+import { isAuthenticated } from "../../Helpers";
+import Unauthorized from "./Unauthorized";
 
 export default function index() {
-	return (
-		<h1>Hello World</h1>
-	)
+    return <>{isAuthenticated() ? null : <Unauthorized />}</>;
 }
