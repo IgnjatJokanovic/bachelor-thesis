@@ -3,13 +3,6 @@ import { Link } from "react-router-dom";
 import { isAuthenticated } from "../Helpers";
 
 export default function Navbar() {
-    const [registerUser, setRegisterUser] = React.useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        gender: ""
-    });
     return (
         <div className="navbar-wrapper">
             <div className="navbar-wrapper--grid container">

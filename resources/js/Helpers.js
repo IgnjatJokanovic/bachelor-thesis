@@ -1,7 +1,7 @@
 //REGEX
 
 const reMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const reString = /^([A-Z][a-z]){3,}$/;
+const reString = /^\w{3,}$/;
 
 //FUNCTIONS
 
@@ -52,6 +52,16 @@ const validateLogin = user => {
 };
 
 const validateRegister = user => {
+    var currentDate = new Date();
+    var selectedDate = new Date(
+        user.year,
+        user.month - 1,
+        user.day,
+        0,
+        0,
+        0,
+        0
+    );
     return new Promise((resolve, reject) => {
         if (user.firstName.length) {
             if (reString.test(user.firstName)) {
@@ -61,36 +71,48 @@ const validateRegister = user => {
                             if (reMail.test(user.email)) {
                                 if (user.password.length) {
                                     if (user.password.length >= 6) {
-                                        return resolve();
+                                        if (selectedDate <= currentDate) {
+                                            if (user.gender != "") {
+                                                return resolve();
+                                            } else {
+                                                return reject(
+                                                    "Please select gender"
+                                                );
+                                            }
+                                        } else {
+                                            return reject(
+                                                "Please Select a valid date"
+                                            );
+                                        }
                                     } else {
-                                        reject(
+                                        return reject(
                                             "Password must be atleast 6 characters long"
                                         );
                                     }
                                 } else {
-                                    reject("Password field is required");
+                                    return reject("Password field is required");
                                 }
                             } else {
-                                reject("Invalid Email format");
+                                return reject("Invalid Email format");
                             }
                         } else {
-                            reject("Email field is required");
+                            return reject("Email field is required");
                         }
                     } else {
-                        reject(
+                        return reject(
                             "Last name field must contain only characters and must be atleast 3 characters long"
                         );
                     }
                 } else {
-                    reject("Last name field is required");
+                    return reject("Last name field is required");
                 }
             } else {
-                reject(
+                return reject(
                     "First name field must contain only characters and must be atleast 3 characters long"
                 );
             }
         } else {
-            reject("First name field is required");
+            return reject("First name field is required");
         }
     });
 };
@@ -116,51 +138,51 @@ const selectDayOptions = () => {
 
 const selectMonthOptions = [
     {
-        value: "Jan",
+        value: 1,
         label: "Jan"
     },
     {
-        value: "Feb",
+        value: 2,
         label: "Feb"
     },
     {
-        value: "Mar",
+        value: 3,
         label: "Mar"
     },
     {
-        value: "Apr",
+        value: 4,
         label: "Apr"
     },
     {
-        value: "May",
+        value: 5,
         label: "May"
     },
     {
-        value: "Jun",
+        value: 6,
         label: "Jun"
     },
     {
-        value: "Jul",
+        value: 7,
         label: "Jul"
     },
     {
-        value: "Aug",
+        value: 8,
         label: "Aug"
     },
     {
-        value: "Sep",
+        value: 9,
         label: "Sep"
     },
     {
-        value: "Oct",
+        value: 10,
         label: "Oct"
     },
     {
-        value: "Nov",
+        value: 11,
         label: "Nov"
     },
     {
-        value: "Dec",
+        value: 12,
         label: "Dec"
     }
 ];
