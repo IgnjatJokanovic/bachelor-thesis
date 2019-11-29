@@ -7,6 +7,7 @@ import {
     validateRegister
 } from "../../Helpers";
 import { AlertContext } from "../../app";
+import axios from "axios";
 
 export default function Unauthorized() {
     const setAlert = React.useContext(AlertContext);
@@ -53,7 +54,12 @@ export default function Unauthorized() {
     const register = () => {
         validateRegister(registerUser)
             .then(() => {
-                alert("CAO");
+                axios
+                    .post("/api/user/register", registerUser)
+                    .then(res => console.log(res))
+                    .catch(err => {
+                        console.log(err);
+                    });
             })
             .catch(err => setAlert(err, "error"));
     };
@@ -120,21 +126,29 @@ export default function Unauthorized() {
                     type="password"
                     placeholder="Password"
                 />
-                <Select
-                    onChange={handleYear}
-                    value={selectYear}
-                    options={selectYearOptions()}
-                />
-                <Select
-                    onChange={handleDay}
-                    value={selectDay}
-                    options={selectDayOptions()}
-                />
-                <Select
-                    onChange={handleMonth}
-                    value={selectMonth}
-                    options={selectMonthOptions}
-                />
+                <div className="select-grid">
+                    <div className="select-grid--item">
+                        <Select
+                            onChange={handleDay}
+                            value={selectDay}
+                            options={selectDayOptions()}
+                        />
+                    </div>
+                    <div className="select-grid--item">
+                        <Select
+                            onChange={handleMonth}
+                            value={selectMonth}
+                            options={selectMonthOptions}
+                        />
+                    </div>
+                    <div className="select-grid--item">
+                        <Select
+                            onChange={handleYear}
+                            value={selectYear}
+                            options={selectYearOptions()}
+                        />
+                    </div>
+                </div>
                 <input
                     onChange={e =>
                         setRegisterUser({
@@ -159,7 +173,7 @@ export default function Unauthorized() {
                     name="rbsex"
                 />
                 Female
-                <button type="submit">Register</button>
+                <button className="btn-register">Register</button>
             </form>
         </div>
     );
