@@ -29,7 +29,7 @@
     {{-- Insert Google Analytics, other tracking scripts here  --}}
     @endif
 
-    <title>FoxBoock</title>
+    <title>FoxBook</title>
 </head>
 
 <body>

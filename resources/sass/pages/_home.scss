@@ -1,14 +1,30 @@
 .select-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    &--item {
-        margin: 1rem;
-    }
+    grid-column-gap: 2rem;
+    margin-bottom: 1rem;
 }
 
 .register-form {
+    width: 50%;
+    margin: auto;
     form {
         margin-top: 20%;
+    }
+    &--grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 2rem;
+        margin-bottom: 1rem;
+    }
+}
+
+.radio-container {
+    margin-bottom: 1rem;
+    input {
+        &:nth-of-type(2) {
+            margin-left: 1rem;
+        }
     }
 }
 
@@ -20,4 +36,13 @@
     border-radius: 5px;
     border-style: none;
     outline-style: none;
+    margin: auto;
+}
+
+.login-container {
+    padding-top: 0.3rem;
+
+    input {
+        margin-right: 1rem;
+    }
 }

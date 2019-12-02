@@ -38,15 +38,16 @@ const App = () => {
     return (
         <Router>
             <Suspense fallback={"Loading.."}>
-                <Navbar />
                 <Alert alertMessage={alertMessage} alertState={alertState} />
-                <ScrollNav>
-                    <AlertContext.Provider value={setAlert}>
+
+                <AlertContext.Provider value={setAlert}>
+                    <Navbar />
+                    <ScrollNav>
                         <Switch>
                             <Route exact path="/" component={Home} />
                         </Switch>
-                    </AlertContext.Provider>
-                </ScrollNav>
+                    </ScrollNav>
+                </AlertContext.Provider>
             </Suspense>
         </Router>
     );

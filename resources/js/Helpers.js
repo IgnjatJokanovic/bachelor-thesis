@@ -43,10 +43,10 @@ const validateLogin = user => {
             if (user.password.length) {
                 return resolve();
             } else {
-                reject("Password field is required");
+                return reject("Password field is required");
             }
         } else {
-            reject("Email field is required");
+            return reject("Email field is required");
         }
     });
 };
@@ -192,6 +192,7 @@ export {
     validateLogin,
     validateRegister,
     fetchCookie,
+    createCookie,
     logOut,
     selectYearOptions,
     selectDayOptions,

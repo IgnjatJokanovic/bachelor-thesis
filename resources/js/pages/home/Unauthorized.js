@@ -56,9 +56,11 @@ export default function Unauthorized() {
             .then(() => {
                 axios
                     .post("/api/user/register", registerUser)
-                    .then(res => console.log(res))
+                    .then(res => {
+                        setAlert(res.data, "success");
+                    })
                     .catch(err => {
-                        console.log(err);
+                        setAlert(err.response.data.messages[0], "error");
                     });
             })
             .catch(err => setAlert(err, "error"));
@@ -80,52 +82,57 @@ export default function Unauthorized() {
 
     return (
         <div className="container register-form">
+            <h1>Sign up</h1>
             <form
                 onSubmit={e => {
                     e.preventDefault();
                     register();
                 }}
             >
-                <input
-                    onChange={e =>
-                        setRegisterUser({
-                            ...registerUser,
-                            firstName: e.target.value
-                        })
-                    }
-                    type="text"
-                    placeholder="First Name"
-                />
-                <input
-                    onChange={e =>
-                        setRegisterUser({
-                            ...registerUser,
-                            lastName: e.target.value
-                        })
-                    }
-                    type="text"
-                    placeholder="Last Name"
-                />
-                <input
-                    onChange={e =>
-                        setRegisterUser({
-                            ...registerUser,
-                            email: e.target.value
-                        })
-                    }
-                    type="text"
-                    placeholder="Email"
-                />
-                <input
-                    onChange={e =>
-                        setRegisterUser({
-                            ...registerUser,
-                            password: e.target.value
-                        })
-                    }
-                    type="password"
-                    placeholder="Password"
-                />
+                <div className="register-form--grid">
+                    <input
+                        onChange={e =>
+                            setRegisterUser({
+                                ...registerUser,
+                                firstName: e.target.value
+                            })
+                        }
+                        type="text"
+                        placeholder="First Name"
+                    />
+                    <input
+                        onChange={e =>
+                            setRegisterUser({
+                                ...registerUser,
+                                lastName: e.target.value
+                            })
+                        }
+                        type="text"
+                        placeholder="Last Name"
+                    />
+                </div>
+                <div className="register-form--grid">
+                    <input
+                        onChange={e =>
+                            setRegisterUser({
+                                ...registerUser,
+                                email: e.target.value
+                            })
+                        }
+                        type="text"
+                        placeholder="Email"
+                    />
+                    <input
+                        onChange={e =>
+                            setRegisterUser({
+                                ...registerUser,
+                                password: e.target.value
+                            })
+                        }
+                        type="password"
+                        placeholder="Password"
+                    />
+                </div>
                 <div className="select-grid">
                     <div className="select-grid--item">
                         <Select
@@ -149,30 +156,32 @@ export default function Unauthorized() {
                         />
                     </div>
                 </div>
-                <input
-                    onChange={e =>
-                        setRegisterUser({
-                            ...registerUser,
-                            gender: e.target.value
-                        })
-                    }
-                    type="radio"
-                    value="M"
-                    name="rbsex"
-                />
-                Male
-                <input
-                    onChange={e =>
-                        setRegisterUser({
-                            ...registerUser,
-                            gender: e.target.value
-                        })
-                    }
-                    type="radio"
-                    value="F"
-                    name="rbsex"
-                />
-                Female
+                <div className="radio-container">
+                    <input
+                        onChange={e =>
+                            setRegisterUser({
+                                ...registerUser,
+                                gender: e.target.value
+                            })
+                        }
+                        type="radio"
+                        value="M"
+                        name="rbsex"
+                    />
+                    Male
+                    <input
+                        onChange={e =>
+                            setRegisterUser({
+                                ...registerUser,
+                                gender: e.target.value
+                            })
+                        }
+                        type="radio"
+                        value="F"
+                        name="rbsex"
+                    />
+                    Female
+                </div>
                 <button className="btn-register">Register</button>
             </form>
         </div>
