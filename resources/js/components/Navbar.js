@@ -10,6 +10,17 @@ export default function Navbar() {
         email: "",
         password: ""
     });
+    const [users, setUsers] = React.useState([]);
+
+    const [param, setParam,] = React.useState("");
+
+    const Search = () => {
+        axios.post("/api/search", { param: param }).then((res) => {
+            setUsers(res.data);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
 
     const login = () => {
         validateLogin(user)
@@ -36,7 +47,17 @@ export default function Navbar() {
                     />
                     {isAuthenticated() ? (
                         <div className="navbar-wrapper--logo--srch">
-                            <input type="text" placeholder="Search..." />
+                            <input onChange={(e) => { setParam(e.target.value) }} type="text" placeholder="Search..." onKeyUp={Search} />
+                            <div className="navbar-wrapper--logo--srch--dropdown">
+
+                                {Object.keys(users).length && users.length ? (
+                                    users.map((user, i) => (
+                                        <div className="navbar-wrapper--logo--srch--dropdown--item">
+                                            <Link key={i} to="/"><img src="https://via.placeholder.com/150" alt="q" /> <p>{user.name}</p><p>{user.surname}</p></Link>
+                                        </div>
+                                    ))
+                                ) : null}
+                            </div>
                         </div>
                     ) : null}
                 </div>
@@ -63,26 +84,26 @@ export default function Navbar() {
                         </div>
                     </div>
                 ) : (
-                    <div className="login-container">
-                        <input
-                            onChange={e =>
-                                setUser({ ...user, email: e.target.value })
-                            }
-                            type="text"
-                            placeholder="Email"
-                        />
-                        <input
-                            onChange={e =>
-                                setUser({ ...user, password: e.target.value })
-                            }
-                            type="password"
-                            placeholder="Password"
-                        />
-                        <button onClick={login} className="btn-green">
-                            Login
+                        <div className="login-container">
+                            <input
+                                onChange={e =>
+                                    setUser({ ...user, email: e.target.value })
+                                }
+                                type="text"
+                                placeholder="Email"
+                            />
+                            <input
+                                onChange={e =>
+                                    setUser({ ...user, password: e.target.value })
+                                }
+                                type="password"
+                                placeholder="Password"
+                            />
+                            <button onClick={login} className="btn-green">
+                                Login
                         </button>
-                    </div>
-                )}
+                        </div>
+                    )}
             </div>
         </div>
     );

@@ -38,6 +38,16 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    public function friends()
+    {
+        return $this->belongsToMany(self::class, 'friends', 'sender_id', 'reciever_id')->withPivot('status');
+    }
+
+    public function friendAction()
+    {
+        return $this->belongsToMany(self::class, 'friends', 'reciever_id', 'sender_id')->withPivot('status');
+    }
+
 
     public function getJWTIdentifier()
     {
@@ -47,5 +57,4 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
 }

@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\User;
 use Validator;
+use JWTAuth;
 
 class UserController extends Controller
 {
-    public function create(){
+    public function create()
+    {
 
         $validator = Validator::make(request()->all(), [
             'firstName' => 'required|string|max:255',
@@ -19,18 +21,14 @@ class UserController extends Controller
             'gender' => 'required'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
 
             $errors = array();
-            foreach($validator->errors()->all() as $error)
-            {
+            foreach ($validator->errors()->all() as $error) {
                 array_push($errors, $error);
-               
             }
             return response()->json(["messages" => $errors], 422);
-
-        }
-        else{
+        } else {
             // dd(request()->all());
             $birth_timestamp = mktime(0, 0, 0, request()->month, request()->day, request()->year);
             $birthday = date("Y-m-d H:i:s", $birth_timestamp);
@@ -38,18 +36,17 @@ class UserController extends Controller
                 'name' => request()->firstName,
                 'surname' => request()->lastName,
                 'email' => request()->email,
-                'password' => Hash::make(request()->password),
+                'password' => bcrypt(request()->password),
                 'gender' => request()->gender,
                 'birthday' => $birthday,
-                'slug' => md5(request()->firstName.request()->email.request()->lastName),
+                'slug' => md5(request()->firstName . request()->email . request()->lastName),
             ]);
 
             return response()->json("Thank you for registering, activation link has been sent to your email", 201);
-          
-          
+
+
             // dd($birthday);
         }
-       
     }
 
     public function login()
@@ -59,25 +56,17 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required|alpha_num',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             $errors = array();
-            foreach($validator->errors()->all() as $error)
-            {
+            foreach ($validator->errors()->all() as $error) {
                 array_push($errors, $error);
-               
             }
             return response()->json(["messages" => $errors], 422);
-        }
-        else 
-        {
+        } else {
             $token = auth()->attempt($credentials);
-            if($token)
-            {
+            if ($token) {
                 return response()->json(['token' => $token]);
-            }
-            else 
-            {
+            } else {
                 return response()->json(['messages' => ['Invalid username or password']], 401);
             }
         }
@@ -85,7 +74,16 @@ class UserController extends Controller
     public function logout()
     {
         auth()->logout();
-        return response()->json(['messages' =>'Successfully logged out'], 200);
+        return response()->json(['messages' => 'Successfully logged out'], 200);
     }
 
+    public function search()
+    {
+        $param = request()->param;
+        $users = User::where(function ($query)  use ($param) {
+            $query->where('name', 'like', "%$param%")
+                ->orWhere('surname', 'like', "%$param%");
+        })->get();
+        return response()->json($users, 200);
+    }
 }
