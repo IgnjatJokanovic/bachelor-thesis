@@ -42,7 +42,7 @@ export default function Navbar() {
             <div className="navbar-wrapper--grid container">
                 <div className="navbar-wrapper--logo">
                     <img
-                        src="https://via.placeholder.com/150"
+                        src="/img/logo/logo.png"
                         alt="foxbook-logo"
                     />
                     {isAuthenticated() ? (
@@ -52,8 +52,8 @@ export default function Navbar() {
 
                                 {Object.keys(users).length && users.length ? (
                                     users.map((user, i) => (
-                                        <div className="navbar-wrapper--logo--srch--dropdown--item">
-                                            <Link key={i} to="/"><img src="https://via.placeholder.com/150" alt="q" /> <p>{user.name}</p><p>{user.surname}</p></Link>
+                                        <div key={i} className="navbar-wrapper--logo--srch--dropdown--item">
+                                            <Link key={i} to={`/user/${user.slug}`}><img src="https://via.placeholder.com/150" alt="q" /> <p>{user.name}</p><p>{user.surname}</p></Link>
                                         </div>
                                     ))
                                 ) : null}

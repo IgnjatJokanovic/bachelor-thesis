@@ -86,4 +86,14 @@ class UserController extends Controller
         })->get();
         return response()->json($users, 200);
     }
+
+    public function show($slug)
+    {
+        $user = User::where('slug', $slug)->first();
+        if ($user != null) {
+            return response()->json($user, 200);
+        } else {
+            return response()->json("User not found", 404);
+        }
+    }
 }

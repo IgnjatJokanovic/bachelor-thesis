@@ -20,6 +20,7 @@ import Alert from "./components/Alert";
 const Home = lazy(() => import("./pages/home"));
 const Navbar = lazy(() => import("./components/Navbar"));
 const AlertContext = React.createContext();
+const User = lazy(() => import("./pages/user"));
 
 const App = () => {
     const [alertMessage, setAlertMessage] = React.useState("");
@@ -45,6 +46,7 @@ const App = () => {
                     <ScrollNav>
                         <Switch>
                             <Route exact path="/" component={Home} />
+                            <Route exact path="/user/:slug" component={User}></Route>
                         </Switch>
                     </ScrollNav>
                 </AlertContext.Provider>

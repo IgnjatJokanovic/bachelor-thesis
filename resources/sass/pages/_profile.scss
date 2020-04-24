@@ -1,0 +1,56 @@
+.user-wrapper{
+  max-width: 70%;
+  margin: auto;
+  &--name-holder{
+    text-align: center;
+  }
+  &--cover{
+    background: url("/img/default/default_cover.png") no-repeat;
+    background-size: contain;
+    height: 393px;
+    position: relative;
+    border-radius: 10px;
+    img{
+      width: 15%;
+      position: absolute;
+      left: 43%;
+      bottom: -2%;
+      border: 5px solid $grey;
+      border-radius: 50%;
+
+    }
+  }
+  &--main-grid{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    &--right{
+      width: 59%;
+      &--write{
+        background-color: $grey;
+      }
+    }
+    &--left{
+      margin-right: 1%;
+      width: 40%;
+      &--friends-section{
+        border-radius: 5px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        background-color:$grey;
+        &--item{
+         a{
+           img{
+           width: 30%;
+           }
+           p{
+             text-align: center;
+           }
+         }
+        }
+      }
+    }
+  }
+ 
+}
