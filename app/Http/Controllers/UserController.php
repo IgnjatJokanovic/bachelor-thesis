@@ -84,7 +84,11 @@ class UserController extends Controller
             $query->where('name', 'like', "%$param%")
                 ->orWhere('surname', 'like', "%$param%");
         })->get();
-        return response()->json($users, 200);
+        if ($users->isEmpty()) {
+            return response()->json("Nothing found", 404);
+        } else {
+            return response()->json($users, 200);
+        }
     }
 
     public function show($slug)
