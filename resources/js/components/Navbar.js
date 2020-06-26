@@ -1,31 +1,24 @@
 import React, { lazy } from "react";
 import { Link } from "react-router-dom";
-import { isAuthenticated, validateLogin, createCookie } from "../Helpers";
-import { AlertContext } from "../app";
-import axios from "axios";
+import { isAuthenticated } from "../Helpers";
+
 const Search = lazy(() => import("./navbar/Search"));
+const Login = lazy(() => import("./navbar/Login"));
+const Friends = lazy(() => import("./navbar/Friends"));
+const Messages = lazy(() => import("./navbar/Messages"));
+const Notifications = lazy(() => import("./navbar/Notifications"));
+const Settings = lazy(() => import("./navbar/Settings"));
 
 export default function Navbar() {
-    const setAlert = React.useContext(AlertContext);
-    const [user, setUser] = React.useState({
-        email: "",
-        password: ""
-    });
+    const [navOption, setNavOption] = React.useState(0);
 
-    const login = () => {
-        validateLogin(user)
-            .then(() => {
-                axios
-                    .post("/api/user/login", user)
-                    .then(res => {
-                        createCookie(res.data.token, 1);
-                        window.location.href = "/";
-                    })
-                    .catch(err => {
-                        setAlert(err.response.data, "error");
-                    });
-            })
-            .catch(err => setAlert(err, "error"));
+    const handleBlurOption = () => {
+        setNavOption(0);
+    };
+
+    const toggleNavOption = option => {
+        // navOption == option ? setNavOption(0) : setNavOption(option);
+        console.log(option);
     };
     return (
         <div className="navbar-wrapper">
@@ -37,45 +30,13 @@ export default function Navbar() {
                 {isAuthenticated() ? (
                     <div className="navbar-wrapper--links">
                         <Link to="/">Home</Link>
-                        <div className="navbar-wrapper--links--dropdown">
-                            <i className="fas fa-user-friends">
-                                <span>10</span>
-                            </i>
-                            <div className="navbar-wrapper--links--dropdown--content" />
-                        </div>
-                        <div className="navbar-wrapper--links--dropdown">
-                            <i className="fas fa-envelope-square">
-                                <span>1</span>
-                            </i>
-                            <div className="navbar-wrapper--links--dropdown--content" />
-                        </div>
-                        <div className="navbar-wrapper--links--dropdown">
-                            <i className="fas fa-bell">
-                                <span>1</span>
-                            </i>
-                            <div className="navbar-wrapper--links--dropdown--content" />
-                        </div>
+                        <Friends toggleNavOption={toggleNavOption} />
+                        <Messages toggleNavOption={toggleNavOption} />
+                        <Notifications toggleNavOption={toggleNavOption} />
+                        <Settings toggleNavOption={toggleNavOption} />
                     </div>
                 ) : (
-                    <div className="login-container">
-                        <input
-                            onChange={e =>
-                                setUser({ ...user, email: e.target.value })
-                            }
-                            type="text"
-                            placeholder="Email"
-                        />
-                        <input
-                            onChange={e =>
-                                setUser({ ...user, password: e.target.value })
-                            }
-                            type="password"
-                            placeholder="Password"
-                        />
-                        <button onClick={login} className="btn-green">
-                            Login
-                        </button>
-                    </div>
+                    <Login />
                 )}
             </div>
         </div>

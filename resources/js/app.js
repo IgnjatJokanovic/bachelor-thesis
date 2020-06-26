@@ -46,7 +46,7 @@ const App = () => {
                     <ScrollNav>
                         <Switch>
                             <Route exact path="/" component={Home} />
-                            <Route exact path="/user/:slug" component={User}></Route>
+                            <Route exact path="/user/:slug" component={User} />
                         </Switch>
                     </ScrollNav>
                 </AlertContext.Provider>
