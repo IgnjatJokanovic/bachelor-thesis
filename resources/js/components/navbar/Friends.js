@@ -1,6 +1,10 @@
 import React from "react";
 
-export default function Friends({ toggleNavOption }) {
+export default function Friends({
+    toggleNavOption,
+    navOption,
+    handleBlurOption
+}) {
     return (
         <div className="navbar-wrapper--links--dropdown">
             <i
@@ -9,7 +13,14 @@ export default function Friends({ toggleNavOption }) {
             >
                 <span>10</span>
             </i>
-            <div className="navbar-wrapper--links--dropdown--content" />
+            <div
+                className={
+                    navOption == 1
+                        ? "navbar-wrapper--links--dropdown--content active"
+                        : "navbar-wrapper--links--dropdown--content"
+                }
+                onBlur={handleBlurOption}
+            />
         </div>
     );
 }

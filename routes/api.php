@@ -21,3 +21,4 @@ Route::post('/user/register', 'UserController@create');
 Route::post('/user/login', 'UserController@login');
 Route::get('/user/{slug}', 'UserController@show');
 Route::post('/search', 'UserController@search');
+Route::post('/user/logout', 'UserController@logout');
