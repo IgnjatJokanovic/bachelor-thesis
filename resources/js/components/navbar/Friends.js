@@ -1,25 +1,32 @@
 import React from "react";
 
-export default function Friends({
-    toggleNavOption,
-    navOption,
-    handleBlurOption
-}) {
+export default function Friends() {
+    const refOption = React.useRef();
+    const [open, setOpen] = React.useState(false);
+    const toggleNavOption = e => {
+        if (refOption.current.contains(e.target)) {
+            return;
+        }
+        setOpen(false);
+    };
+    React.useEffect(() => {
+        document.addEventListener("mousedown", toggleNavOption);
+
+        return () => {
+            document.removeEventListener("mousedown", toggleNavOption);
+        };
+    }, []);
     return (
-        <div className="navbar-wrapper--links--dropdown">
-            <i
-                className="fas fa-user-friends"
-                onClick={() => toggleNavOption(1)}
-            >
+        <div ref={refOption} className="navbar-wrapper--links--dropdown">
+            <i className="fas fa-user-friends" onClick={e => setOpen(!open)}>
                 <span>10</span>
             </i>
             <div
                 className={
-                    navOption == 1
-                        ? "navbar-wrapper--links--dropdown--content active"
-                        : "navbar-wrapper--links--dropdown--content"
+                    open
+                        ? "navbar-wrapper--links--dropdown--content 3 active"
+                        : "navbar-wrapper--links--dropdown--content 3"
                 }
-                onBlur={handleBlurOption}
             />
         </div>
     );

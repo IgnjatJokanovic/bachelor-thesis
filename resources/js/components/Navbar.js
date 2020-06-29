@@ -10,17 +10,6 @@ const Notifications = lazy(() => import("./navbar/Notifications"));
 const Settings = lazy(() => import("./navbar/Settings"));
 
 export default function Navbar() {
-    const [navOption, setNavOption] = React.useState(0);
-
-    const handleBlurOption = () => {
-        setNavOption(0);
-        console.log("test");
-    };
-
-    const toggleNavOption = option => {
-        navOption == option ? setNavOption(0) : setNavOption(option);
-        console.log(option);
-    };
     return (
         <div className="navbar-wrapper">
             <div className="navbar-wrapper--grid container">
@@ -31,26 +20,10 @@ export default function Navbar() {
                 {isAuthenticated() ? (
                     <div className="navbar-wrapper--links">
                         <Link to="/">Home</Link>
-                        <Friends
-                            toggleNavOption={toggleNavOption}
-                            navOption={navOption}
-                            handleBlurOption={handleBlurOption}
-                        />
-                        <Messages
-                            toggleNavOption={toggleNavOption}
-                            navOption={navOption}
-                            handleBlurOption={handleBlurOption}
-                        />
-                        <Notifications
-                            toggleNavOption={toggleNavOption}
-                            navOption={navOption}
-                            handleBlurOption={handleBlurOption}
-                        />
-                        <Settings
-                            toggleNavOption={toggleNavOption}
-                            navOption={navOption}
-                            handleBlurOption={handleBlurOption}
-                        />
+                        <Friends />
+                        <Messages />
+                        <Notifications />
+                        <Settings />
                     </div>
                 ) : (
                     <Login />

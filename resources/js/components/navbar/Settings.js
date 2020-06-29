@@ -2,11 +2,7 @@ import React from "react";
 import { logOut } from "../../Helpers";
 import axios from "axios";
 
-export default function Settings({
-    toggleNavOption,
-    navOption,
-    handleBlurOption
-}) {
+export default function Settings() {
     const logout = () => {
         axios
             .post("/api/user/logout")
@@ -17,20 +13,34 @@ export default function Settings({
                 logOut();
             });
     };
+    const refOption = React.useRef();
+    const [open, setOpen] = React.useState(false);
+    const toggleNavOption = e => {
+        if (refOption.current.contains(e.target)) {
+            return;
+        }
+        setOpen(false);
+    };
+    React.useEffect(() => {
+        document.addEventListener("mousedown", toggleNavOption);
+
+        return () => {
+            document.removeEventListener("mousedown", toggleNavOption);
+        };
+    }, []);
     return (
-        <div className="navbar-wrapper--links--dropdown">
+        <div ref={refOption} className="navbar-wrapper--links--dropdown">
             <i
                 className="fa fa-cogs"
                 aria-hidden="true"
-                onClick={() => toggleNavOption(4)}
+                onClick={e => setOpen(!open)}
             />
             <div
                 className={
-                    navOption == 4
-                        ? "navbar-wrapper--links--dropdown--content active"
-                        : "navbar-wrapper--links--dropdown--content"
+                    open
+                        ? "navbar-wrapper--links--dropdown--content 4 active"
+                        : "navbar-wrapper--links--dropdown--content 4"
                 }
-                onBlur={handleBlurOption}
             >
                 <p onClick={logout}>Log out</p>
             </div>

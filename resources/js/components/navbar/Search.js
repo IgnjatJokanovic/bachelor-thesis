@@ -2,7 +2,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Search() {
-    const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+    const refOption = React.useRef();
+    const [open, setOpen] = React.useState(false);
+    const toggleNavOption = e => {
+        if (refOption.current.contains(e.target)) {
+            return;
+        }
+        setOpen(false);
+    };
+    React.useEffect(() => {
+        document.addEventListener("mousedown", toggleNavOption);
+
+        return () => {
+            document.removeEventListener("mousedown", toggleNavOption);
+        };
+    }, []);
     const [users, setUsers] = React.useState([]);
 
     const [param, setParam] = React.useState("");
@@ -13,28 +27,20 @@ export default function Search() {
             axios
                 .post("/api/search", { param: param })
                 .then(res => {
+                    setOpen(true);
                     setUsers(res.data);
-                    console.log(isSearchOpen);
                 })
                 .catch(err => {
                     console.log(err.response);
                     setUsers([]);
                 });
         } else {
-            setIsSearchOpen(false);
+            setOpen(false);
         }
     };
 
-    const HandleSearchBlur = () => {
-        setIsSearchOpen(false);
-        console.log("TEST");
-    };
-
-    const HandleSearchFocus = () => {
-        setIsSearchOpen(true);
-    };
     return (
-        <div className="navbar-wrapper--logo--srch">
+        <div ref={refOption} className="navbar-wrapper--logo--srch">
             <input
                 onChange={e => {
                     setParam(e.target.value);
@@ -42,15 +48,14 @@ export default function Search() {
                 type="text"
                 placeholder="Search..."
                 onKeyUp={Search}
-                onFocus={HandleSearchFocus}
+                onClick={e => setOpen(!open)}
             />
             <div
                 className={
-                    isSearchOpen
+                    open
                         ? "navbar-wrapper--logo--srch--dropdown"
                         : "navbar-wrapper--logo--srch--dropdown hidden"
                 }
-                onBlur={HandleSearchBlur}
             >
                 {Object.keys(users).length && users.length
                     ? users.map((user, i) => (

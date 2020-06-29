@@ -1,23 +1,32 @@
 import React from "react";
 
-export default function Notifications({
-    toggleNavOption,
-    navOption,
-    handleBlurOption
-}) {
+export default function Notifications() {
+    const refOption = React.useRef();
+    const [open, setOpen] = React.useState(false);
+    const toggleNavOption = e => {
+        if (refOption.current.contains(e.target)) {
+            return;
+        }
+        setOpen(false);
+    };
+    React.useEffect(() => {
+        document.addEventListener("mousedown", toggleNavOption);
+
+        return () => {
+            document.removeEventListener("mousedown", toggleNavOption);
+        };
+    }, []);
     return (
-        <div className="navbar-wrapper--links--dropdown">
-            <i className="fas fa-bell" onClick={() => toggleNavOption(3)}>
+        <div ref={refOption} className="navbar-wrapper--links--dropdown">
+            <i className="fas fa-bell" onClick={e => setOpen(!open)}>
                 <span>1</span>
             </i>
             <div
-                tabIndex={-1}
                 className={
-                    navOption == 3
-                        ? "navbar-wrapper--links--dropdown--content active"
-                        : "navbar-wrapper--links--dropdown--content"
+                    open
+                        ? "navbar-wrapper--links--dropdown--content 1 active"
+                        : "navbar-wrapper--links--dropdown--content 1"
                 }
-                onBlur={handleBlurOption}
             />
         </div>
     );
