@@ -12,10 +12,31 @@ const createCookie = (cookieValue, daysToExpire) => {
         "user-token=" + cookieValue + "; path=/; expires=" + date.toGMTString();
 };
 
+const createUser = (cookieValue, daysToExpire) => {
+    const date = new Date();
+    date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
+    var cookie = [
+        "user-obj",
+        "=",
+        JSON.stringify(cookieValue),
+        "; path=/; expires=",
+        date.toGMTString()
+    ].join("");
+    document.cookie = cookie;
+};
+
 const logOut = () => {
     document.cookie =
         "user-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+        "user-obj=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.href = "/";
+};
+
+const fetchUser = () => {
+    var result = document.cookie.match(new RegExp("user-obj" + "=([^;]+)"));
+    result && (result = JSON.parse(result[1]));
+    return result;
 };
 
 const fetchCookie = () => {
@@ -196,5 +217,7 @@ export {
     logOut,
     selectYearOptions,
     selectDayOptions,
-    selectMonthOptions
+    selectMonthOptions,
+    createUser,
+    fetchUser
 };

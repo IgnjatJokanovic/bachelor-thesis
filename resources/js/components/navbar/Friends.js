@@ -1,8 +1,13 @@
 import React from "react";
+import { fetchUser, fetchCookie } from "../../Helpers";
+import { EchoContext } from "../../app";
 
 export default function Friends() {
+    const echo = React.useContext(EchoContext);
     const refOption = React.useRef();
     const [open, setOpen] = React.useState(false);
+    const [recieved, setRecieved] = React.useState(0);
+    console.log(fetchUser().id);
     const toggleNavOption = e => {
         if (refOption.current.contains(e.target)) {
             return;
@@ -10,6 +15,12 @@ export default function Friends() {
         setOpen(false);
     };
     React.useEffect(() => {
+        echo.private(`friendship-received.${fetchUser().id}`).listen(
+            "FriendRequestSent",
+            e => {
+                console.log(e);
+            }
+        );
         document.addEventListener("mousedown", toggleNavOption);
 
         return () => {
@@ -19,7 +30,7 @@ export default function Friends() {
     return (
         <div ref={refOption} className="navbar-wrapper--links--dropdown">
             <i className="fas fa-user-friends" onClick={e => setOpen(!open)}>
-                <span>10</span>
+                {recieved == 0 ? null : <span>{recieved}</span>}
             </i>
             <div
                 className={

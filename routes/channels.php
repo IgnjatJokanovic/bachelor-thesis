@@ -11,6 +11,6 @@
 |
 */
 
-Broadcast::channel('friendship-sent.{id}', function ($user, $id) {
+Broadcast::channel('friendship-received.{id}', function ($user, $id) {
     return $user->id === (int) $id;
 });

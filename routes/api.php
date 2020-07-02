@@ -22,3 +22,8 @@ Route::post('/user/login', 'UserController@login');
 Route::get('/user/{slug}', 'UserController@show');
 Route::post('/search', 'UserController@search');
 Route::post('/user/logout', 'UserController@logout');
+
+
+Route::group(['middleware' => ['jwt.verify']], function () {
+    Route::post("/user/add", "FriendshipController@sendRequest");
+});

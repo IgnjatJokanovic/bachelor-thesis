@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertContext } from "../../app";
 import axios from "axios";
-import { validateLogin, createCookie } from "../../Helpers";
+import { validateLogin, createCookie, createUser } from "../../Helpers";
 
 export default function Login() {
     const setAlert = React.useContext(AlertContext);
@@ -10,7 +10,8 @@ export default function Login() {
         password: ""
     });
 
-    const login = () => {
+    const login = e => {
+        e.preventDefault();
         validateLogin(user)
             .then(() => {
                 axios
@@ -18,7 +19,9 @@ export default function Login() {
                         headers: { Accept: "application/json" }
                     })
                     .then(res => {
+                        // console.log(res.data.user);
                         createCookie(res.data.token, 1);
+                        createUser(res.data.user, 1);
                         window.location.href = "/";
                     })
                     .catch(err => {
@@ -29,19 +32,27 @@ export default function Login() {
     };
     return (
         <div className="login-container">
-            <input
-                onChange={e => setUser({ ...user, email: e.target.value })}
-                type="text"
-                placeholder="Email"
-            />
-            <input
-                onChange={e => setUser({ ...user, password: e.target.value })}
-                type="password"
-                placeholder="Password"
-            />
-            <button onClick={login} className="btn-green">
-                Login
-            </button>
+            <form>
+                <input
+                    onChange={e => setUser({ ...user, email: e.target.value })}
+                    type="text"
+                    placeholder="Email"
+                />
+                <input
+                    onChange={e =>
+                        setUser({ ...user, password: e.target.value })
+                    }
+                    type="password"
+                    placeholder="Password"
+                />
+                <button
+                    type="submit"
+                    onClick={e => login(e)}
+                    className="btn-green"
+                >
+                    Login
+                </button>
+            </form>
         </div>
     );
 }

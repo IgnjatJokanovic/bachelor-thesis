@@ -1,8 +1,18 @@
 import React from "react";
+import { fetchCookie } from "../../Helpers";
 
 export default function Messages() {
     const refOption = React.useRef();
     const [open, setOpen] = React.useState(false);
+    const [recieved, setRecieved] = React.useState(0);
+    const parseCookie = token => {
+        if (!token) {
+            return;
+        }
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace("-", "+").replace("_", "/");
+        return JSON.parse(window.atob(base64));
+    };
     const toggleNavOption = e => {
         if (refOption.current.contains(e.target)) {
             return;
@@ -11,7 +21,7 @@ export default function Messages() {
     };
     React.useEffect(() => {
         document.addEventListener("mousedown", toggleNavOption);
-
+        // console.log(parseCookie(fetchCookie()));
         return () => {
             document.removeEventListener("mousedown", toggleNavOption);
         };
@@ -19,7 +29,7 @@ export default function Messages() {
     return (
         <div ref={refOption} className="navbar-wrapper--links--dropdown">
             <i className="fas fa-envelope-square" onClick={e => setOpen(!open)}>
-                <span>1</span>
+                {recieved == 0 ? null : <span>10</span>}
             </i>
             <div
                 className={

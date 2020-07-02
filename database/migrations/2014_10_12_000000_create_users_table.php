@@ -24,6 +24,10 @@ class CreateUsersTable extends Migration
             $table->timestamp('birthday')->nullable();
             $table->string('slug')->unique();
             $table->char('gender');
+            $table->unsignedBigInteger("profile")->nullable();
+            $table->unsignedBigInteger("cover")->nullable();
+            $table->foreign('profile')->references('id')->on('images')->onDelete('cascade');
+            $table->foreign('cover')->references('id')->on('images')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
