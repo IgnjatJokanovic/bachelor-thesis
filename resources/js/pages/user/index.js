@@ -9,8 +9,10 @@ export default function User({ match }) {
     const addFriend = () => {
         axios
             .post("/api/user/add", user, {
-                Authorization: "Bearer " + fetchCookie(),
-                headers: { Accept: "application/json" }
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "Bearer " + fetchCookie()
+                }
             })
             .then(res => console.log(res))
             .catch(err => console.log(err));
@@ -18,6 +20,7 @@ export default function User({ match }) {
 
     React.useEffect(() => {
         if (match.params.slug) {
+            console.log(match.params);
             axios
                 .get(`/api/user/${match.params.slug}`)
                 .then(res => {
@@ -29,7 +32,7 @@ export default function User({ match }) {
         }
     }, []);
     return (
-        <div className="container">
+        <div className="container user-wrapper">
             <div className="user-wrapper">
                 <div className="user-wrapper--cover">
                     <img src="/img/default/default_profile.png" alt="" />

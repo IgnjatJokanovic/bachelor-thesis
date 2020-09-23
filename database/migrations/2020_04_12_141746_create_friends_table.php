@@ -17,7 +17,8 @@ class CreateFriendsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('reciever_id');
-            $table->enum('status', ['PENDING', 'ACCEPTED', 'DECLINED', 'DELETED']);
+            $table->enum('status', ['pending', 'accepted', 'decplined'])->default('pending');
+            $table->boolean("opened")->default(false);
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('reciever_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

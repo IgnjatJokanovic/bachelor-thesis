@@ -40,12 +40,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function friends()
     {
-        return $this->belongsToMany(self::class, 'friends', 'sender_id', 'reciever_id')->withPivot('status');
+        return $this->belongsToMany(self::class, 'friends', 'sender_id', 'reciever_id')->withPivot('status', 'opened');
     }
 
     public function friendAction()
     {
-        return $this->belongsToMany(self::class, 'friends', 'reciever_id', 'sender_id')->withPivot('status');
+        return $this->belongsToMany(self::class, 'friends', 'reciever_id', 'sender_id')->withPivot('status', 'opened');
     }
 
 

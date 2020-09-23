@@ -17,3 +17,15 @@ input {
     border: 1px solid $grey;
     border-radius: 5px;
 }
+a {
+    text-decoration: none !important;
+}
+
+// body {
+//     overflow-y: scroll;
+//     -ms-overflow-style: none;
+//     scrollbar-width: none;
+//     &::-webkit-scrollbar {
+//         display: none;
+//     }
+// }

@@ -34,8 +34,8 @@ export default function Messages() {
             <div
                 className={
                     open
-                        ? "navbar-wrapper--links--dropdown--content 2 active"
-                        : "navbar-wrapper--links--dropdown--content 2"
+                        ? "navbar-wrapper--links--dropdown--content--long active"
+                        : "navbar-wrapper--links--dropdown--content--long"
                 }
             />
         </div>

@@ -27,6 +27,7 @@ export default function Search() {
             axios
                 .post("/api/search", { param: param })
                 .then(res => {
+                    console.log(res);
                     setOpen(true);
                     setUsers(res.data);
                 })

@@ -41,6 +41,7 @@ const App = () => {
                     encrypted: true,
                     auth: {
                         headers: {
+                            Accept: "application/json",
                             Authorization: "Bearer " + fetchCookie(),
                             "X-CSRF-TOKEN": document
                                 .querySelector('meta[name="csrf-token"]')

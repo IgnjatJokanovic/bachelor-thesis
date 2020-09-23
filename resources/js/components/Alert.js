@@ -5,8 +5,8 @@ export default function Alert({ alertMessage, alertState }) {
         <div
             className={
                 alertState === "success"
-                    ? "alert alert--visible alert--success"
-                    : "alert alert--visible alert--danger"
+                    ? "alertt alertt--visible alertt--success"
+                    : "alertt alertt--visible alertt--danger"
             }
         >
             {alertMessage}
@@ -14,9 +14,9 @@ export default function Alert({ alertMessage, alertState }) {
     ) : (
         <div
             className={
-                alertState === "success"
-                    ? "alert alert--success"
-                    : "alert alert--danger"
+                alertMessage === "success"
+                    ? "alertt alertt--success"
+                    : "alertt alertt--danger"
             }
         >
             {alertMessage}

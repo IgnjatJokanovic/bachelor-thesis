@@ -25,8 +25,8 @@ export default function Notifications() {
             <div
                 className={
                     open
-                        ? "navbar-wrapper--links--dropdown--content 1 active"
-                        : "navbar-wrapper--links--dropdown--content 1"
+                        ? "navbar-wrapper--links--dropdown--content--long active"
+                        : "navbar-wrapper--links--dropdown--content--long"
                 }
             />
         </div>

@@ -1,6 +1,7 @@
 import React from "react";
-import { logOut } from "../../Helpers";
+import { logOut, fetchUser } from "../../Helpers";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Settings() {
     const logout = () => {
@@ -38,11 +39,31 @@ export default function Settings() {
             <div
                 className={
                     open
-                        ? "navbar-wrapper--links--dropdown--content 4 active"
-                        : "navbar-wrapper--links--dropdown--content 4"
+                        ? "navbar-wrapper--links--dropdown--content active"
+                        : "navbar-wrapper--links--dropdown--content"
                 }
             >
-                <p onClick={logout}>Log out</p>
+                <div className="row">
+                    <div className="col-12" />
+                </div>
+                l<p onClick={logout}>Log out</p>
+                <Link to={`/user/${fetchUser().slug}`}>
+                    <div className="row">
+                        <div className="col-6">
+                            <img
+                                src={
+                                    fetchUser().profile == null
+                                        ? "/img/default/default_profile.png"
+                                        : fetchUser().profile
+                                }
+                                alt={
+                                    fetchUser().name + " " + fetchUser().surname
+                                }
+                            />
+                        </div>
+                        <div className="col-6">Your pofile</div>
+                    </div>{" "}
+                </Link>
             </div>
         </div>
     );
