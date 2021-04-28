@@ -25,8 +25,15 @@ Route::post('/search', 'UserController@search');
 
 
 Route::group(['middleware' => ['jwt.verify']], function () {
+
+    //HANDLING USERS
+
     Route::post("/user/add", "FriendshipController@sendRequest");
     Route::post('/user/logout', 'UserController@logout');
     Route::post("/user/accept/{id}", "FriendshipController@accept");
     Route::post("/user/decline/{id}", "FriendshipController@decline");
+
+    //HANDLING POSTS
+
+    Route::post("/article/create", "ArticleController@create");
 });

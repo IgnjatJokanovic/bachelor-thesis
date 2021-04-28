@@ -31,6 +31,11 @@ const App = () => {
     const [alertMessage, setAlertMessage] = React.useState("");
     const [alertState, setAlertState] = React.useState("");
     const [echo, setEcho] = React.useState();
+    const [imgObj, setImgObj] = React.useState({
+        src: "",
+        open: false
+    });
+
     React.useEffect(() => {
         if (isAuthenticated()) {
             setEcho(
@@ -52,6 +57,13 @@ const App = () => {
             );
         }
     }, []);
+
+    const imagePreview = (src) => {
+        setImgObj({
+            src: src,
+            open: true
+        });
+    }
 
     const setAlert = (message, state) => {
         setAlertMessage(message);
