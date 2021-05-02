@@ -21,11 +21,16 @@ import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import { fetchCookie } from "./Helpers";
 
+
 const Home = lazy(() => import("./pages/home"));
 const Navbar = lazy(() => import("./components/Navbar"));
-const AlertContext = React.createContext();
 const User = lazy(() => import("./pages/user"));
+const ImageModal = lazy(() => import("./components/ImageModal"));
+
+//CONTEXT
+const AlertContext = React.createContext();
 const EchoContext = React.createContext();
+const ImageContext = React.createContext();
 
 const App = () => {
     const [alertMessage, setAlertMessage] = React.useState("");
@@ -35,6 +40,19 @@ const App = () => {
         src: "",
         open: false
     });
+
+    const refImg = React.useRef();
+
+    const toggleModal = e => {
+        if (refImg.current.contains(e.target)) {
+            return;
+        }
+        setImgObj({ ...imgObj, open: false});
+    };
+
+    const toggleImage = () => {
+        setImgObj({ ...imgObj, open: !imgObj.open});
+    }
 
     React.useEffect(() => {
         if (isAuthenticated()) {
@@ -56,6 +74,11 @@ const App = () => {
                 })
             );
         }
+        document.addEventListener("mousedown", toggleModal);
+
+        return () => {
+            document.removeEventListener("mousedown", toggleModal);
+        };
     }, []);
 
     const imagePreview = (src) => {
@@ -82,19 +105,23 @@ const App = () => {
 
                 <AlertContext.Provider value={setAlert}>
                     <EchoContext.Provider value={echo}>
-                        <Navbar />
-                        <ScrollNav>
-                            <Switch>
-                                <Route exact path="/" component={Home} />
-                                <Route
-                                    exact
-                                    path="/user/:slug"
-                                    component={User}
-                                />
-                            </Switch>
-                        </ScrollNav>
+                        <ImageContext.Provider value={imagePreview}>
+                            <Navbar />
+                            <ScrollNav>
+                                <Switch>
+                                    <Route exact path="/" component={Home} />
+                                    <Route
+                                        exact
+                                        path="/user/:slug"
+                                        component={User}
+                                    />
+                                </Switch>
+                            </ScrollNav>
+                            <ImageModal open={imgObj.open} src={imgObj.src} togleFun={toggleImage} refImg={refImg}/>
+                        </ImageContext.Provider>
                     </EchoContext.Provider>
                 </AlertContext.Provider>
+
             </Suspense>
         </Router>
     );
@@ -104,4 +131,4 @@ if (document.getElementById("app")) {
     ReactDOM.render(<App />, document.getElementById("app"));
 }
 
-export { AlertContext, EchoContext };
+export { AlertContext, EchoContext, ImageContext };

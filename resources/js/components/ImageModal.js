@@ -1,11 +1,15 @@
-import React from 'react'
+import React from 'react';
+import { ImageContext } from "../app";
 
-export default function ImageModal({ src, isOpen }) {
+export default function ImageModal({open, src, togleFun, refImg}) {
+    // const { setImgObj, imgObj } = React.useContext(ImageContext);
+
+
+
     return (
-        <div id="myModal" class={isOpen ? "modal active" : "modal"}>
-            <span class="close">&times;</span>
-            <img class="modal-content" id="img01" src={src} />
-            <div id="caption"></div>
+        <div className={open ? "custom-modal active" : "custom-modal"}>
+            <span className="custom-modal--close" onClick={() => togleFun()}>&times;</span>
+            <img ref={refImg} className="custom-modal--content" src={src} />
         </div>
     )
 }

@@ -1,5 +1,8 @@
 import React from "react";
+import NewPost from "../../components/NewPost";
 
 export default function Authorised() {
-    return <div />;
+    return <div className="container">
+        <NewPost />
+    </div>;
 }
