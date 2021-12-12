@@ -1,3 +1,4 @@
+import jwt_decode from "jwt-decode";
 //REGEX
 
 const reMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -34,9 +35,8 @@ const logOut = () => {
 };
 
 const fetchUser = () => {
-    var result = document.cookie.match(new RegExp("user-obj" + "=([^;]+)"));
-    result && (result = JSON.parse(result[1]));
-    return result;
+    var decoded = jwt_decode(fetchCookie());
+    return decoded;
 };
 
 const fetchCookie = () => {

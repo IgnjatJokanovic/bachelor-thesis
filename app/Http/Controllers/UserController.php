@@ -65,8 +65,7 @@ class UserController extends Controller
         } else {
             $token = auth()->attempt($credentials);
             if ($token) {
-                $user = auth()->user();
-                return response()->json(['token' => $token, "user" => $user]);
+                return response()->json(['token' => $token]);
             } else {
                 return response()->json(['messages' => ['Invalid username or password']], 401);
             }

@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertContext } from "../../app";
 import axios from "axios";
-import { validateLogin, createCookie, createUser } from "../../Helpers";
+import { validateLogin, createCookie } from "../../Helpers";
 
 export default function Login() {
     const setAlert = React.useContext(AlertContext);
@@ -19,9 +19,8 @@ export default function Login() {
                         headers: { Accept: "application/json" }
                     })
                     .then(res => {
-                        // console.log(res.data.user);
+
                         createCookie(res.data.token, 1);
-                        createUser(res.data.user, 1);
                         window.location.href = "/";
                     })
                     .catch(err => {
