@@ -15,8 +15,10 @@ class CreateEmotionsTable extends Migration
     {
         Schema::create('emotions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string("placeholder");
-            $table->string("icon");
+            $table->string("code");
+            $table->string("desctiption")->nullable();
+            $table->enum('type', ['emotion', 'reaction', 'emoji'])->index()->default('emoji');
+
             $table->timestamps();
         });
     }

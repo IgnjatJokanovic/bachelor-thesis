@@ -34,7 +34,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post("/user/decline/{id}", "FriendshipController@decline");
 
     //HANDLIGN EMOJIS
-    Route::get("/reactions", "ReactionsController@index");
+    Route::get("/emojiList", "ReactionsController@index");
     //HANDLING POSTS
 
     Route::post("/article/create", "ArticleController@create");

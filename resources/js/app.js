@@ -20,6 +20,7 @@ import { isAuthenticated } from "./Helpers";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import { fetchCookie } from "./Helpers";
+import axios from "axios";
 
 
 const Home = lazy(() => import("./pages/home"));
@@ -31,6 +32,7 @@ const ImageModal = lazy(() => import("./components/ImageModal"));
 const AlertContext = React.createContext();
 const EchoContext = React.createContext();
 const ImageContext = React.createContext();
+const EmojiContext = React.createContext();
 
 const App = () => {
     const [alertMessage, setAlertMessage] = React.useState("");
@@ -40,6 +42,9 @@ const App = () => {
         src: "",
         open: false
     });
+
+    const [emojiList, setEmojiList] = React.useState([]);
+    const [emotions, setEmotions] = React.useState([]);
 
     const refImg = React.useRef();
 
@@ -73,6 +78,18 @@ const App = () => {
                     }
                 })
             );
+
+            axios.get('/api/emojiList')
+                    .then(res => {
+                        console.log(res.data);
+                        setEmojiList(res.data);
+                        var x = res.data.filter(item => item.type === "emotion");
+                        // console.log("x", x);
+                        setEmotions(x);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
         }
         document.addEventListener("mousedown", toggleModal);
 
@@ -106,18 +123,20 @@ const App = () => {
                 <AlertContext.Provider value={setAlert}>
                     <EchoContext.Provider value={echo}>
                         <ImageContext.Provider value={imagePreview}>
-                            <Navbar />
-                            <ScrollNav>
-                                <Switch>
-                                    <Route exact path="/" component={Home} />
-                                    <Route
-                                        exact
-                                        path="/user/:slug"
-                                        component={User}
-                                    />
-                                </Switch>
-                            </ScrollNav>
-                            <ImageModal open={imgObj.open} src={imgObj.src} togleFun={toggleImage} refImg={refImg}/>
+                            <EmojiContext.Provider value={{emojiList, emotions}}>
+                                <Navbar />
+                                <ScrollNav>
+                                    <Switch>
+                                        <Route exact path="/" component={Home} />
+                                        <Route
+                                            exact
+                                            path="/user/:slug"
+                                            component={User}
+                                        />
+                                    </Switch>
+                                </ScrollNav>
+                                <ImageModal open={imgObj.open} src={imgObj.src} togleFun={toggleImage} refImg={refImg}/>
+                            </EmojiContext.Provider>
                         </ImageContext.Provider>
                     </EchoContext.Provider>
                 </AlertContext.Provider>
@@ -131,4 +150,4 @@ if (document.getElementById("app")) {
     ReactDOM.render(<App />, document.getElementById("app"));
 }
 
-export { AlertContext, EchoContext, ImageContext };
+export { AlertContext, EchoContext, ImageContext, EmojiContext };

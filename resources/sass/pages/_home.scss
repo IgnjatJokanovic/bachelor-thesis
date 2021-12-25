@@ -21,6 +21,12 @@
             height: 50px;
             border-radius: 50px;
         }
+        max-width: 35vw;
+    }
+    .new-post-insert{
+        border: 1px solid grey;
+        border-radius: 10px;
+        padding: 0.7rem;
     }
     .insert-icons{
 
@@ -29,6 +35,9 @@
             i{
                 font-size: 1.7rem;
                 cursor: pointer;
+            }
+            .image-icon{
+                font-size: 2rem;
             }
             &.second{
                 padding-top: 3px;
@@ -40,7 +49,8 @@
             }
             &--description{
                 display: none;
-                background: $grey;
+                background: $black;
+                opacity: 0.60;
                 color: white;
                 padding: 0.5rem 0.2rem;
                 position: absolute;
