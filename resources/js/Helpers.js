@@ -58,6 +58,17 @@ const isAuthenticated = () => {
     return fetchCookie("user-token").length > 0;
 };
 
+const authParams = {
+    headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${fetchCookie()}`,
+        "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content")
+    }
+
+}
+
 const validateLogin = user => {
     return new Promise((resolve, reject) => {
         if (user.email.length) {
@@ -219,5 +230,6 @@ export {
     selectDayOptions,
     selectMonthOptions,
     createUser,
-    fetchUser
+    fetchUser,
+    authParams
 };

@@ -13,13 +13,13 @@ require("./bootstrap");
  */
 import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { ScrollContext as ScrollNav } from "react-router-scroll-4";
+import { BrowserRouter as Router, Routes as Switch, Route } from "react-router-dom";
+// import { ScrollContext as ScrollNav } from "react-router-scroll-4";
 import Alert from "./components/Alert";
 import { isAuthenticated } from "./Helpers";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
-import { fetchCookie } from "./Helpers";
+import { authParams, fetchCookie } from "./Helpers";
 import axios from "axios";
 
 
@@ -64,8 +64,8 @@ const App = () => {
             setEcho(
                 new Echo({
                     broadcaster: "pusher",
-                    key: "f5c1bddb4e7b04aba47b",
-                    cluster: "eu",
+                    key: process.env.MIX_PUSHER_APP_KEY,
+                    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
                     encrypted: true,
                     auth: {
                         headers: {
@@ -79,7 +79,7 @@ const App = () => {
                 })
             );
 
-            axios.get('/api/emojiList')
+            axios.get('/api/emojiList', authParams)
                     .then(res => {
                         console.log(res.data);
                         setEmojiList(res.data);
@@ -125,16 +125,15 @@ const App = () => {
                         <ImageContext.Provider value={imagePreview}>
                             <EmojiContext.Provider value={{emojiList, emotions}}>
                                 <Navbar />
-                                <ScrollNav>
+
                                     <Switch>
-                                        <Route exact path="/" component={Home} />
+                                        <Route path="/" element={<Home />} />
                                         <Route
-                                            exact
-                                            path="/user/:slug"
-                                            component={User}
+                                            element="/user/:slug"
+                                            component={<User />}
                                         />
                                     </Switch>
-                                </ScrollNav>
+
                                 <ImageModal open={imgObj.open} src={imgObj.src} togleFun={toggleImage} refImg={refImg}/>
                             </EmojiContext.Provider>
                         </ImageContext.Provider>

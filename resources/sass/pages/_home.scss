@@ -5,6 +5,14 @@
     margin-bottom: 1rem;
 }
 
+.pac-target-input{
+   width: 100%;
+}
+
+.pac-container{
+    z-index: 1000000;
+}
+
 .fs-big{
     font-size: 2rem;
     padding-top: 5px;
@@ -13,14 +21,112 @@
     }
 }
 
+.no-padding{
+    padding: unset !important;
+}
+
+.editable-link{
+    font-weight: bold;
+    color: blue;
+    cursor: pointer;
+}
+
+.remove-link{
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.emoji-holder{
+    padding: 0.7rem;
+    border: 1px solid #505050;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    &:hover{
+        background-color: 	#888888;
+        color: white;
+    }
+}
+
+
+
 .container {
     &.new-post{
         padding-top: 7rem;
-        img {
+        .user-picture {
             width: 50px;
             height: 50px;
             border-radius: 50px;
         }
+
+        .text-area{
+            position: relative;
+
+            &--emoji{
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                font-size: 20px;
+                cursor: pointer;
+                &--emoji-holder{
+                    max-height: 9rem;
+                    overflow-y: auto;
+                    position: absolute;
+                    bottom: -143px;
+                    right: -45px;
+                    box-shadow: 5px 5px 15px 3px rgb(0 0 0 / 58%);
+                    border-radius: 5px;
+                    background-color: white;
+                    z-index: 1;
+
+
+                }
+
+            }
+
+        }
+
+        textarea{
+            resize: none;
+            width: 100%;
+            border: 1px solid grey;
+            border-radius: 5px;
+            padding: 1rem;
+
+        }
+
+        .preview-post-image{
+            position: relative;
+            &--controlls{
+                position: absolute;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                right: 10px;
+                top: 10px;
+                cursor: pointer;
+                &--edit{
+                    margin-right: 1rem;
+                }
+                &--close{
+                    font-size: 20px;
+                    border-radius: 50%;
+                    background-color: white;
+                    color: black;
+
+                    padding: 0.3rem 0.9rem;
+                }
+
+            }
+            .preview-upload-image{
+                width: 100%;
+                height: 30vh;
+            }
+        }
+
+
         max-width: 35vw;
     }
     .new-post-insert{

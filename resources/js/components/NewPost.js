@@ -3,47 +3,50 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { fetchUser } from "../Helpers";
 import { EmojiContext } from "../app";
-
+import AddImage from './newPost/AddImage';
+import TagFriends from './newPost/TagFriends';
+import AddEmotion from './newPost/AddEmotion';
+import AddLocation from './newPost/AddLocation';
 
 export default function NewPost() {
     const   {emojiList, emotions}  = React.useContext(EmojiContext);
     const [article, setArticle] = React.useState({
         creator: fetchUser().id,
-        body: "",
-        image: "",
-        emotion: 0,
-        taged: []
+        body: null,
+        image: null,
+        emotion: null,
+        taged: [],
+        address: null,
+        wallId: null
     });
-    const [activeModal, setActiveModal] = React.useState(0);
-    const refModal = React.useRef();
-    const toogleModal = e => {
-        if (refModal.current.contains(e.target)) {
-            return;
-        }
-        setActiveModal(0);
-    }
     const refFile = React.useRef(null);
-    const getBase46 = (file) => {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-            fileReader.onload = () => {
-                resolve(fileReader.result);
-            }
-            fileReader.onerror = (error) => {
-                reject(error);
-            }
-        });
-    };
-    const handleFileRead = async (e) => {
-        const file = e.target.files[0];
-        const base64 = await getBase46(file);
-        console.log(base64);
-        setArticle({ ...article, image: base64});
-    };
+
+    const [activeModal, setActiveModal] = React.useState(0);
+
     const openFile = () => {
         refFile.current.click();
     }
+
+    const updateAddress = (address) => {
+        var newAddress = address === null ? address : address.formatted_address;
+        setArticle({...article, address: newAddress});
+        setActiveModal(0);
+    }
+
+    const updateImage = (image) => {
+        setArticle({...article, image: image});
+        setActiveModal(0);
+    }
+
+    const updateEmotion = (emotion) => {
+        setArticle({...article, emotion: emotion});
+        setActiveModal(0);
+    }
+
+    const updateFriends = (friends) => {
+
+    }
+
     const submitPost = () => {
         axios.post("/api/post/create", article, {
             headers: { Accept: "application/json" }
@@ -53,11 +56,7 @@ export default function NewPost() {
             console.log(err);
         });
     };
-    const resetEmotion = () => {
-        console.log("pocetak", article.emotion);
-        setArticle({...article, emotion: 0});
-        console.log("IZMENA", article.emotion);
-    };
+
     React.useEffect(() => {
         // axios.get("/api/reactions", {
         //     headers: { Accept: "application/json" }
@@ -65,14 +64,6 @@ export default function NewPost() {
         //     console.log(res);
         //     setEmotions(res.data);
         // })
-
-        console.log("emotions", emotions);
-
-        document.addEventListener("mousedown", toogleModal);
-
-        return () => {
-            document.removeEventListener("mousedown", toogleModal);
-        };
     }, []);
     return (
         <div className="container new-post">
@@ -80,21 +71,11 @@ export default function NewPost() {
                 e.preventDefault();
                 submitPost();
             }}>
-                {article.emotion != 0 ? (
-                <div className="row justify-content-md-center mb-1">
-                    <div className="col-7">
-                      <span onClick={() => setArticle({...article, emotion: 0})} className="font-weight-bold text-danger fs-big cur">&times;</span>  Feeling: {emotions.filter(item => item.id == article.emotion).map((emotion, i) => (
-                          <i key={i} title={emotion.placeholder} className={emotion.code + " fs-big"}/>
-                      ))}
-                    </div>
-
-                </div>)
-                :""}
                 <div className="row justify-content-md-center">
-                    <div className="col-2">
+                    <div className="col-2 d-flex justify-content-center">
                         <Link to={`/user/${fetchUser().slug}`}>
                             <img
-                                className="float-right"
+                                className=" user-picture"
                                 src={
                                     fetchUser().profile == null
                                         ? "/img/default/default_profile.png"
@@ -107,121 +88,82 @@ export default function NewPost() {
 
                         </Link>
                     </div>
-                    <div className="col-10">
-                        <textarea rows="2" cols="56" placeholder={`What are you think about, ${fetchUser().name} ?`} onChange={e => setArticle({ ...article, body: e.target.value })}></textarea>
+                    <div className="col-10 no-padding">
+                        <div className='col-12 no-padding'>
+                            <span>
+                                <b>{fetchUser().name} {fetchUser().surname}</b>&nbsp;
+                                {article.address !== null ? (
+                                    <span>
+                                        <span className='remove-link' onClick={() => updateAddress(null)}>&times;</span>&nbsp; is at <span className='editable-link' onClick={() => setActiveModal(3)}>{article.address}</span>&nbsp;
+                                    </span>
+                                ) : ""}
+
+                                {article.emotion !== null ? (
+                                    <span>
+                                        <span className='remove-link' onClick={() => updateEmotion(null)}>&times;</span>&nbsp; is feeling {emotions.filter(item => item.id == article.emotion).map((item, i) => (
+                                                <span key={i}>
+                                                    <span className='editable-link' onClick={() => setActiveModal(2)}> {item.desctiption}</span>&nbsp;
+                                                    <span dangerouslySetInnerHTML={{ __html: item.code }}></span>
+                                                </span>
+                                            ))}
+                                    </span>
+                                ) : ""}
+                            </span>
+                        </div>
+                        <div className='col-12 mt-3 text-area no-padding'>
+
+                            <div className='text-area--emoji'>
+                                <div className='text-area--emoji--emoji-holder'>
+                                    <div className='row'>
+                                        {emojiList.map((item, i) => (
+                                            <div  className='col-2 text-center text-area--emoji--emoji-holder--emoji' key={i}  dangerouslySetInnerHTML={{ __html: item.code }}>
+
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <i className="fas fa-smile"></i>
+                            </div>
+                            <textarea rows="3" dangerouslySetInnerHTML={{ __html: article.body }}  placeholder={`What are you think about, ${fetchUser().name} ?`} onChange={e => setArticle({ ...article, body: e.target.value })}></textarea>
+                        </div>
+
                     </div>
 
 
                 </div>
+                {article.image != null ?(
+                    <div className='preview-post-image'>
+                        <div className='preview-post-image--controlls'>
+                            <div className='preview-post-image--controlls--edit'>
+                                <button type='button' className='btn btn-light' onClick={() => openFile()}>Edit</button>
+                            </div>
+                            <div className='preview-post-image--controlls--close' onClick={() => updateImage(null)}>
+                                &times;
+                            </div>
+                        </div>
+                        <img className='preview-upload-image' src={article.image} />
+                    </div>
+                 )
+                : ""}
                 <div className="row justify-content-md-center mt-2 new-post-insert">
-
-
-                            <div className="col-3">
-                                Add to post
-                            </div>
-                            <div className="col-9">
-                                <div className="row insert-icons">
-                                    <div className="col-2 text-center">
-                                        <div className="insert-icons--icon">
-                                            <div className="insert-icons--icon--description">
-                                                Add image
-                                            </div>
-
-                                            <i className="fas fa-image image-icon" onClick={() => openFile()}></i>
-                                            <input ref={refFile} type="file" className="d-none" onChange={e => handleFileRead(e)}/>
-                                        </div>
-                                    </div>
-                                    <div className="col-2 text-center">
-                                        <div className="insert-icons--icon second">
-                                            <div className="insert-icons--icon--description">
-                                                Tag a friend
-                                            </div>
-                                            <i className="fas fa-user-tag" onClick={() => setActiveModal(1)}></i>
-                                        </div>
-                                    </div>
-                                    <div className="col-2 text-center">
-                                        <div className="insert-icons--icon second">
-                                            <div className="insert-icons--icon--description">
-                                                Feeling
-                                            </div>
-                                            <i className="fas fa-smile-beam" onClick={() => setActiveModal(2)}></i>
-                                        </div>
-                                    </div>
-                                    <div className="col-2 text-center">
-                                        <div className="insert-icons--icon second">
-                                            <div className="insert-icons--icon--description">
-                                                Location
-                                            </div>
-                                            <i className="fas fa-map-marker-alt" onClick={() => setActiveModal(3)}></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
+                    <div className="col-3 my-auto">
+                        Add to post
+                    </div>
+                    <div className="col-9">
+                        <div className="row insert-icons">
+                            <AddImage refFile={refFile} openFile={openFile} updateImage={updateImage} />
+                            <TagFriends activeModal={activeModal} updateModal={setActiveModal} />
+                            <AddEmotion activeModal={activeModal} updateModal={setActiveModal} updateEmotion={updateEmotion} emotions={emotions} />
+                            <AddLocation activeModal={activeModal} updateModal={setActiveModal} updateAddress={updateAddress} />
+                        </div>
+                    </div>
                 </div>
-                <div className="row justify-content-md-center mt-2">
-                    <div className="col-12">
+                <div className="row justify-content-md-center mt-2 ">
+                    <div className="col-12 no-padding">
                         <button type="submit" className="btn btn-primary btn-lg btn-block">Post</button>
                     </div>
                 </div>
             </form>
-            <div ref={refModal} className={activeModal === 2 ? "modal fade show d-block" : "modal fade"} id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title text-center font-weight-bold" id="exampleModalLabel">How are you feeling?</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setActiveModal(0)}>
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <div className='row'>
-                            {Object.keys(emotions).length && emotions.length ? emotions.map((emotion, i) => (
-                                <div className='col-6'>
-                                    <span className='emoji' dangerouslySetInnerHTML={{ __html: emotion.code }}></span> {emotion.desctiption}
-                                </div>
-                            )) : null}
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div ref={refModal} className={activeModal === 1 ? "modal fade show d-block" : "modal fade"} id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title text-center font-weight-bold" id="exampleModalLabel">Tag friends</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setActiveModal(0)}>
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            ...
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div ref={refModal} className={activeModal === 3 ? "modal fade show d-block" : "modal fade"} id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title text-center font-weight-bold" id="exampleModalLabel">Choose an location</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setActiveModal(0)}>
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            ...
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     )
 }
