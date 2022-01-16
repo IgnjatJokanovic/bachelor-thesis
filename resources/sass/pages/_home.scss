@@ -67,7 +67,7 @@
             &--emoji{
                 position: absolute;
                 bottom: 10px;
-                right: 10px;
+                right: 22px;
                 font-size: 20px;
                 cursor: pointer;
                 &--emoji-holder{
@@ -80,22 +80,33 @@
                     border-radius: 5px;
                     background-color: white;
                     z-index: 1;
+                    display: none;
+
+
+                    &.active{
+                        display: block;
+                    }
 
 
                 }
 
             }
 
+            &--input{
+                width: 100%;
+                border: 1px solid grey;
+                border-radius: 5px;
+                padding: 1rem;
+                height: 25vh;
+                overflow-y: scroll;
+                &:empty::before{
+                    content: attr(data-placeholder);
+                }
+            }
+
         }
 
-        textarea{
-            resize: none;
-            width: 100%;
-            border: 1px solid grey;
-            border-radius: 5px;
-            padding: 1rem;
 
-        }
 
         .preview-post-image{
             position: relative;

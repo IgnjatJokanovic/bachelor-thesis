@@ -20,6 +20,9 @@ export default function NewPost() {
         wallId: null
     });
     const refFile = React.useRef(null);
+    const refEmoji = React.useRef(null);
+
+    const [activeEmoji, setActiveEmoji] = React.useState(false);
 
     const [activeModal, setActiveModal] = React.useState(0);
 
@@ -47,6 +50,24 @@ export default function NewPost() {
 
     }
 
+    const updateArticleBody = (value) => {
+        if(article.body === null){
+            setArticle({...article, body: value});
+        } else{
+            var current = article.body + value;
+            console.log(current, "curr");
+            setArticle({...article, body: current});
+        }
+        console.log(article.body, value);
+    }
+
+    const toggleEmojiDropdown = (e) => {
+        if (refEmoji.current.contains(e.target)) {
+            return;
+        }
+        setActiveEmoji(false);
+    }
+
     const submitPost = () => {
         axios.post("/api/post/create", article, {
             headers: { Accept: "application/json" }
@@ -64,6 +85,12 @@ export default function NewPost() {
         //     console.log(res);
         //     setEmotions(res.data);
         // })
+
+        document.addEventListener("mousedown", toggleEmojiDropdown);
+
+        return () => {
+            document.removeEventListener("mousedown", toggleEmojiDropdown);
+        };
     }, []);
     return (
         <div className="container new-post">
@@ -112,19 +139,19 @@ export default function NewPost() {
                         </div>
                         <div className='col-12 mt-3 text-area no-padding'>
 
-                            <div className='text-area--emoji'>
-                                <div className='text-area--emoji--emoji-holder'>
+                            <div className='text-area--emoji' ref={refEmoji}>
+                                <div className={activeEmoji ? 'text-area--emoji--emoji-holder active' : 'text-area--emoji--emoji-holder'}>
                                     <div className='row'>
                                         {emojiList.map((item, i) => (
-                                            <div  className='col-2 text-center text-area--emoji--emoji-holder--emoji' key={i}  dangerouslySetInnerHTML={{ __html: item.code }}>
+                                            <div  className='col-2 text-center text-area--emoji--emoji-holder--emoji' key={i}  dangerouslySetInnerHTML={{ __html: item.code }} onClick={() => updateArticleBody(item.code)}>
 
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-                                <i className="fas fa-smile"></i>
+                                <i className="fas fa-smile" onClick={e => setActiveEmoji(!activeEmoji)}></i>
                             </div>
-                            <textarea rows="3" dangerouslySetInnerHTML={{ __html: article.body }}  placeholder={`What are you think about, ${fetchUser().name} ?`} onChange={e => setArticle({ ...article, body: e.target.value })}></textarea>
+                            <div className='text-area--input' contentEditable={true} dangerouslySetInnerHTML={{ __html: article.body }}  data-placeholder={`What are you think about, ${fetchUser().name} ?`} onBlur={e => setArticle({ ...article, body: e.target.innerHTML })}></div>
                         </div>
 
                     </div>
