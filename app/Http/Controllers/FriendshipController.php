@@ -65,4 +65,18 @@ class FriendshipController extends Controller
         $tmp->pivot->save();
         return response()->json("Success", 201);
     }
+
+    public function search()
+    {
+        $param = request()->param;
+        $payload = JWTAuth::parseToken()->getPayload();
+        $id = $payload->get('id');
+        $user = JWTAuth::parseToken()->authenticate();
+        $friends =  $user->confirmedFriends()->where(function ($query)  use ($param) {
+                        $query->where('name', 'like', "%$param%")
+                            ->orWhere('surname', 'like', "%$param%");
+                    });
+
+        dd($friends);
+    }
 }

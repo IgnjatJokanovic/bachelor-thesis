@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Emotion;
+use App\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,6 +13,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $user1 = new User();
+        $user1->name = "John";
+        $user1->surname = "Doe";
+        $user1->email = "john@gmail.com";
+        $user1->password = bcrypt("123456");
+        $user1->gender = "M";
+        $user1->birthday = date("Y-m-d H:i:s");
+        $user1->slug = md5("Johnjohn@gmail.comDoe");
+        $user1->save();
+
+        $user2 = new User();
+        $user2->name = "Jane";
+        $user2->surname = "Doe";
+        $user2->email = "jane@gmail.com";
+        $user2->password = bcrypt("123456");
+        $user2->gender = "F";
+        $user2->birthday = date("Y-m-d H:i:s");
+        $user2->slug = md5("Janejane@gmail.comDoe");
+        $user2->save();
+
+        $user1->friends()->attach($user2, ['status' => 'accepted', 'opened' => true]);
+
+
+
+
         // $this->call(UsersTableSeeder::class);
         Emotion::create(["code" => "&#x1f600;"]);
         Emotion::create(["code" => "&#x1f603;"]);

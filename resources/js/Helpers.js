@@ -149,6 +149,22 @@ const validateRegister = user => {
     });
 };
 
+const validateArticle = post => {
+    return new  Promise((resolve, reject) => {
+        if(
+            post.body === null &&
+            post.image === null &&
+            post.emotion === null &&
+            post.taged.length === 0 &&
+            post.address === null
+        ){
+            return reject("Fill up something on a post");
+        }else{
+            return resolve();
+        }
+    });
+};
+
 const selectYearOptions = () => {
     let today = new Date();
     let yearArray = [];
@@ -231,5 +247,6 @@ export {
     selectMonthOptions,
     createUser,
     fetchUser,
-    authParams
+    authParams,
+    validateArticle
 };

@@ -6,7 +6,7 @@
         text-align: center;
     }
     &--cover {
-        background: url("/img/default/default_cover.png") no-repeat;
+
         background-size: contain;
         height: 393px;
         position: relative;
@@ -19,6 +19,10 @@
             border: 5px solid $grey;
             border-radius: 50%;
         }
+        &::after{
+            background: url(attr(data-url)) no-repeat;
+        }
+        @extend .loading;
     }
     &--main-grid {
         display: flex;

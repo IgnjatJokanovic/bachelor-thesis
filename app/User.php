@@ -53,6 +53,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
+
     public function getJWTCustomClaims()
     {
         return [
@@ -61,5 +62,10 @@ class User extends Authenticatable implements JWTSubject
             'surname' => $this->surname,
             'slug' => $this->slug
         ];
+    }
+
+    public function confirmedFriends()
+    {
+        return $this->friends()->where('status', 'accepted');
     }
 }

@@ -1,15 +1,16 @@
 import React from 'react'
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { fetchUser } from "../Helpers";
-import { EmojiContext } from "../app";
+import { fetchUser, validateArticle } from "../Helpers";
+import { EmojiContext, AlertContext } from "../app";
 import AddImage from './newPost/AddImage';
 import TagFriends from './newPost/TagFriends';
 import AddEmotion from './newPost/AddEmotion';
 import AddLocation from './newPost/AddLocation';
 
-export default function NewPost() {
+export default function NewPost({wallId = null}) {
     const   {emojiList, emotions}  = React.useContext(EmojiContext);
+    const setAlert = React.useContext(AlertContext);
     const [article, setArticle] = React.useState({
         creator: fetchUser().id,
         body: null,
@@ -17,7 +18,7 @@ export default function NewPost() {
         emotion: null,
         taged: [],
         address: null,
-        wallId: null
+        wallId: wallId
     });
     const refFile = React.useRef(null);
     const refEmoji = React.useRef(null);
@@ -69,13 +70,21 @@ export default function NewPost() {
     }
 
     const submitPost = () => {
-        axios.post("/api/post/create", article, {
-            headers: { Accept: "application/json" }
-        }).then(res => {
-            console.log(res);
+        validateArticle(article).then(() => {
+            axios.post("/api/posts/create", article, {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "Bearer " + fetchCookie(),
+                }
+            }).then(res => {
+                console.log(res);
+            }).catch(err => {
+                console.log(err);
+            });
         }).catch(err => {
-            console.log(err);
+            setAlert(err);
         });
+
     };
 
     React.useEffect(() => {

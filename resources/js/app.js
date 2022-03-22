@@ -129,8 +129,8 @@ const App = () => {
                                     <Switch>
                                         <Route path="/" element={<Home />} />
                                         <Route
-                                            element="/user/:slug"
-                                            component={<User />}
+                                            path="/user/:slug"
+                                            element={<User />}
                                         />
                                     </Switch>
 

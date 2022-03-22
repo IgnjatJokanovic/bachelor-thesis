@@ -21,7 +21,20 @@ export default function TagFriends({activeModal, updateModal, friends, setFriend
                 <Modal.Header closeButton>
                 <Modal.Title>Tag friends</Modal.Title>
                 </Modal.Header>
-                <Modal.Body> ...
+                <Modal.Body>
+                    <div className='row'>
+                        <div className='col-8 friend-search-bar'>
+                            <span className='friend-search-bar--search-icon'>
+                                <i className="fas fa-search"></i>
+                            </span>
+                            <input type='text' className='friend-search-bar--input' placeholder='Search for friends'/>
+                        </div>
+                        <div className='col-4'>
+                            <button className='btn btn-primary text-center'>
+                                Add
+                            </button>
+                        </div>
+                    </div>
 
                 </Modal.Body>
             </Modal>
